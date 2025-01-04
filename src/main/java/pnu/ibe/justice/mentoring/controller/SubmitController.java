@@ -100,6 +100,8 @@ public class SubmitController {
         }
         model.addAttribute("caSort", caSort); // 현재 선택된 카테고리를 모델에 추가
 
+
+
         return "pages/submit";
     }
 

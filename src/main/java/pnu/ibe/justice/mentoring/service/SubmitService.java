@@ -20,12 +20,15 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.time.OffsetDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.stream.Collectors;
+
 
 @Service
 public class SubmitService {
@@ -93,7 +96,6 @@ public class SubmitService {
         // 카테고리가 주어진 값과 일치하는 멘토를 찾음
         List<SubmitReport> submitReports = submitReportRepository.findBySubCategory(category);
 
-        // Mentor 엔티티를 MentorDTO로 변환
         return submitReports.stream()
                 .map(submitReport -> mapToDTO(submitReport, new SubmitReportDTO()))
                 .collect(Collectors.toList());
@@ -123,6 +125,7 @@ public class SubmitService {
         submitReportRepository.deleteById(seqId);
     }
 
+
     private SubmitReportDTO mapToDTO(final SubmitReport submitReport, final SubmitReportDTO submitReportDTO) {
         submitReportDTO.setSeqId(submitReport.getSeqId());
         submitReportDTO.setContent(submitReport.getContent());
@@ -130,13 +133,28 @@ public class SubmitService {
         submitReportDTO.setTitle(submitReport.getTitle());
         submitReportDTO.setTeam(submitReport.getTeam());
         submitReportDTO.setCategory(submitReport.getCategory());
-        submitReportDTO.setDateCreated(submitReport.getDateCreated());
-        submitReportDTO.setLastUpdated(submitReport.getLastUpdated());
         submitReportDTO.setSubCategory(submitReport.getSubCategory());
         submitReportDTO.setUsers(submitReport.getUsers() == null ? null : submitReport.getUsers());
+
+        // UTC 시간을 KST로 변환하고 다시 OffsetDateTime으로 설정
+        if (submitReport.getDateCreated() != null) {
+            ZonedDateTime kstDateCreated = submitReport.getDateCreated().atZoneSameInstant(ZoneId.of("Asia/Seoul"));
+            OffsetDateTime offsetDateCreated = kstDateCreated.toOffsetDateTime();
+            submitReportDTO.setDateCreated(offsetDateCreated);
+        } else {
+            submitReportDTO.setDateCreated(null);
+        }
+
+        if (submitReport.getLastUpdated() != null) {
+            ZonedDateTime kstLastUpdated = submitReport.getLastUpdated().atZoneSameInstant(ZoneId.of("Asia/Seoul"));
+            OffsetDateTime offsetLastUpdated = kstLastUpdated.toOffsetDateTime();
+            submitReportDTO.setLastUpdated(offsetLastUpdated);
+        } else {
+            submitReportDTO.setLastUpdated(null);
+        }
+
         return submitReportDTO;
     }
-
     private SubmitReport mapToEntity(final SubmitReportDTO submitReportDTO, final SubmitReport submitReport) {
         submitReport.setTitle(submitReportDTO.getTitle());
         submitReport.setContent(submitReportDTO.getContent());

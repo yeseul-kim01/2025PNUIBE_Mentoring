@@ -1,5 +1,6 @@
 package pnu.ibe.justice.mentoring.domain;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;
@@ -13,11 +14,17 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import java.time.OffsetDateTime;
 import java.util.Set;
+
+import jakarta.validation.constraints.NotNull;
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 
+@Getter
+@Setter
 @Entity
 @Table(name = "Answers")
 @EntityListeners(AuditingEntityListener.class)
@@ -50,60 +57,7 @@ public class Answer {
     @Column(nullable = false)
     private OffsetDateTime lastUpdated;
 
-    public Integer getSeqId() {
-        return seqId;
-    }
-
-    public void setSeqId(final Integer seqId) {
-        this.seqId = seqId;
-    }
-
-    public String getContent() {
-        return content;
-    }
-
-    public void setContent(final String content) {
-        this.content = content;
-    }
-
-    public Set<AnswerFile> getAnswerFiles() {
-        return answerFiles;
-    }
-
-    public void setAnswerFiles(final Set<AnswerFile> answerFiles) {
-        this.answerFiles = answerFiles;
-    }
-
-    public Question getQuestion() {
-        return question;
-    }
-
-    public void setQuestion(final Question question) {
-        this.question = question;
-    }
-
-    public User getUsers() {
-        return users;
-    }
-
-    public void setUsers(final User users) {
-        this.users = users;
-    }
-
-    public OffsetDateTime getDateCreated() {
-        return dateCreated;
-    }
-
-    public void setDateCreated(final OffsetDateTime dateCreated) {
-        this.dateCreated = dateCreated;
-    }
-
-    public OffsetDateTime getLastUpdated() {
-        return lastUpdated;
-    }
-
-    public void setLastUpdated(final OffsetDateTime lastUpdated) {
-        this.lastUpdated = lastUpdated;
-    }
+    @JsonProperty("qRId")
+    private Integer qRId;
 
 }

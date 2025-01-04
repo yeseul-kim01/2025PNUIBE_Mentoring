@@ -58,7 +58,7 @@
                             <div class="text-muted text-right">
                                 <small th:text="'작성자: ' + ${report.users.name}">Author</small>
                                 <small th:text="'카테고리: ' + ${report.subCategory}">카테고리</small>
-<!--                                <small th:text="${#dates.format(report.dateCreated, 'yyyy-MM-dd')}">작성날짜</small>-->
+                                <small th:text="'작성날짜: ' + ${#temporals.format(report.dateCreated, 'yyyy-MM-dd HH시 mm분')}">작성날짜</small>
                             </div>
                         </div>
                     </div>

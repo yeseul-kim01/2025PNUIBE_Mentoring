@@ -1,6 +1,8 @@
 package pnu.ibe.justice.mentoring.service;
 
 import java.util.List;
+import java.util.Optional;
+
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import pnu.ibe.justice.mentoring.domain.Question;
@@ -18,7 +20,7 @@ public class QuestionFileService {
     private final QuestionRepository questionRepository;
 
     public QuestionFileService(final QuestionFileRepository questionFileRepository,
-            final QuestionRepository questionRepository) {
+                               final QuestionRepository questionRepository) {
         this.questionFileRepository = questionFileRepository;
         this.questionRepository = questionRepository;
     }
@@ -28,6 +30,17 @@ public class QuestionFileService {
         return questionFiles.stream()
                 .map(questionFile -> mapToDTO(questionFile, new QuestionFileDTO()))
                 .toList();
+    }
+
+    public QuestionFile findFileById(final Integer id) {
+        Optional<QuestionFile> OPquestionFile = questionFileRepository.findById(id);
+        QuestionFile questionFile  = null;
+        if (OPquestionFile.isPresent()) {
+            questionFile = OPquestionFile.get();
+        } else {
+            System.out.println("error");
+        }
+        return questionFile;
     }
 
     public QuestionFileDTO get(final Integer seqId) {
@@ -54,17 +67,19 @@ public class QuestionFileService {
     }
 
     private QuestionFileDTO mapToDTO(final QuestionFile questionFile,
-            final QuestionFileDTO questionFileDTO) {
+                                     final QuestionFileDTO questionFileDTO) {
         questionFileDTO.setSeqId(questionFile.getSeqId());
         questionFileDTO.setFileSrc(questionFile.getFileSrc());
+        questionFileDTO.setUuid(questionFile.getUuid());
         questionFileDTO.setType(questionFile.getType());
         questionFileDTO.setQuestion(questionFile.getQuestion() == null ? null : questionFile.getQuestion().getSeqId());
         return questionFileDTO;
     }
 
     private QuestionFile mapToEntity(final QuestionFileDTO questionFileDTO,
-            final QuestionFile questionFile) {
+                                     final QuestionFile questionFile) {
         questionFile.setFileSrc(questionFileDTO.getFileSrc());
+        questionFile.setUuid(questionFileDTO.getUuid());
         questionFile.setType(questionFileDTO.getType());
         final Question question = questionFileDTO.getQuestion() == null ? null : questionRepository.findById(questionFileDTO.getQuestion())
                 .orElseThrow(() -> new NotFoundException("question not found"));

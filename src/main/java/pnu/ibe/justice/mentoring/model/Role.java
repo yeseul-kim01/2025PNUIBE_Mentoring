@@ -13,6 +13,7 @@ public enum Role {
     MEMBER,
     GUEST,-->*/
 
+    ROOT("ROLE_ROOT","최상위 관리자"),
     ADMIN("ROLE_ADMIN", "관리자"),
     MANAGER("ROLE_MANAGER", "매니저"),
     MENTO("ROLE_MENTO", "멘토"),

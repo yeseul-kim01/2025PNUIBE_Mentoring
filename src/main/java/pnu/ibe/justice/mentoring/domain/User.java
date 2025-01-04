@@ -84,6 +84,9 @@ public class User {
     @OneToMany(mappedBy = "users")
     private Set<Answer> answers;
 
+    @OneToMany(mappedBy = "users")
+    private Set<SubmitReport> submitReports;
+
     @CreatedDate
     @Column(nullable = false, updatable = false)
     private OffsetDateTime dateCreated;

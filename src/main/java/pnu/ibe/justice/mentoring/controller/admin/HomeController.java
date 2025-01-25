@@ -2,6 +2,8 @@ package pnu.ibe.justice.mentoring.controller.admin;
 
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,7 +22,8 @@ public class HomeController {
 
 
     @GetMapping("")
-    public String index() {
+    public String index(Model model, @AuthenticationPrincipal UserDetails sessionUser) {
+            model.addAttribute("userName", sessionUser.getUsername());
         return "admin/home/index";
     }
 

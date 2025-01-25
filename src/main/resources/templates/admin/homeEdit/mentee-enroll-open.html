@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>신청서 접수 관리</title>
+    <link th:href="@{/webjars/bootstrap/5.3.3/css/bootstrap.min.css}" rel="stylesheet">
+    <script th:src="@{/webjars/bootstrap/5.3.3/js/bootstrap.bundle.min.js}" defer></script>
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+        .card {
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+<body>
+<div class="container my-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card p-4">
+                <h2 class="text-center text-primary mb-4">멘티 신청서 접수 기간 바꾸기</h2>
+                <form th:action="@{/admin/userFiles/status}" method="post">
+                    <div class="form-check form-switch mb-4">
+                        <!-- 서버에서 상태 값 전달 -->
+                        <input class="form-check-input"
+                               type="checkbox"
+                               id="openStatus"
+                               name="openStatus"
+                               value="true"
+                               th:checked="${menteeOpenStatus}" />
+                        <label class="form-check-label" for="openStatus">신청서 접수 오픈</label>
+                    </div>
+                    <div class="text-center">
+                        <button type="submit" class="btn btn-primary btn-lg">저장</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- JS로 상태 값 초기화 -->
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const openStatusInput = document.getElementById("openStatus");
+        const mentorOpenStatus = /*[[${mentorOpenStatus}]]*/ false; // 서버에서 상태 값 전달
+
+        // 스위치 버튼 상태 초기화
+        if (menteeOpenStatus) {
+            openStatusInput.checked = true;
+        } else {
+            openStatusInput.checked = false;
+        }
+    });
+</script>
+</body>
+</html>

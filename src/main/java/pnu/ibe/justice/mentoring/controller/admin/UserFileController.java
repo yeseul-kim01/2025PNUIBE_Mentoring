@@ -7,6 +7,8 @@ import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -18,6 +20,7 @@ import pnu.ibe.justice.mentoring.domain.User;
 import pnu.ibe.justice.mentoring.domain.UserFile;
 import pnu.ibe.justice.mentoring.model.UserFileDTO;
 import pnu.ibe.justice.mentoring.repos.UserRepository;
+import pnu.ibe.justice.mentoring.service.ApplicationState;
 import pnu.ibe.justice.mentoring.service.UserFileService;
 import pnu.ibe.justice.mentoring.util.CustomCollectors;
 import pnu.ibe.justice.mentoring.util.WebUtils;
@@ -35,13 +38,16 @@ public class UserFileController {
 
     private final UserFileService userFileService;
     private final UserRepository userRepository;
+    private final ApplicationState applicationState;
     private String uploadFolder = "/Users/gim-yeseul/Desktop/mentoring_pj/mentoring/upload/";
 
     public UserFileController(final UserFileService userFileService,
-            final UserRepository userRepository) {
+            final UserRepository userRepository, final ApplicationState applicationState) {
         this.userFileService = userFileService;
         this.userRepository = userRepository;
+        this.applicationState = applicationState;
     }
+
 
     @ModelAttribute
     public void prepareContext(final Model model) {
@@ -78,7 +84,9 @@ public class UserFileController {
     }
 
     @GetMapping("/add")
-    public String add(@ModelAttribute("userFile") final UserFileDTO userFileDTO) {
+    public String add(@ModelAttribute("userFile") final UserFileDTO userFileDTO,
+                      Model model) {
+        model.addAttribute("menteeOpenStatus", applicationState.isMenteeOpenStatus()); // 현재 상태 값 전달
         return "admin/userFile/add";
     }
 
@@ -121,5 +129,42 @@ public class UserFileController {
         redirectAttributes.addFlashAttribute(WebUtils.MSG_INFO, WebUtils.getMessage("userFile.delete.success"));
         return "redirect:/admin/userFiles";
     }
+
+
+
+    @GetMapping("/status")
+    public String mentorStatus(Model model, @AuthenticationPrincipal UserDetails sessionUser) {
+        if (sessionUser == null) {
+            return "redirect:/login"; // 인증되지 않은 사용자는 로그인 페이지로 리다이렉트
+        }
+
+        // 상태 값 전달
+        model.addAttribute("userName", sessionUser);
+        model.addAttribute("menteeOpenStatus", applicationState.isMenteeOpenStatus()); // 현재 상태 값 전달
+        return "admin/homeEdit/mentee-enroll-open";
+    }
+
+
+    @PostMapping("/status")
+    public String updateFormOpenStatus(
+            @AuthenticationPrincipal UserDetails userDetails,
+            @RequestParam(name = "openStatus", defaultValue = "false") boolean openStatus,
+            RedirectAttributes redirectAttributes,
+            Model model) {
+        // 세션 유저 확인
+        if (userDetails == null) {
+            return "redirect:/login"; // 로그인 페이지로 리다이렉트
+        }
+
+        // 로그 기록 등 처리 (데이터베이스 저장 로직 추가 가능)
+        System.out.println("신청서 접수 오픈 상태: " + openStatus + ", 변경한 유저: " + userDetails.getUsername());
+        applicationState.setMenteeOpenStatus(openStatus);
+
+        // 성공 메시지 전달
+        redirectAttributes.addFlashAttribute(WebUtils.MSG_INFO, WebUtils.getMessage("멘티 신청 접수를 "+openStatus+"로 변경하였습니다."));
+
+        return "redirect:/admin/manage";
+    }
+
 
 }

@@ -21,4 +21,6 @@ public class AnswerDTO {
 
     private Integer qRId;
 
+
+
 }

@@ -14,6 +14,7 @@ import pnu.ibe.justice.mentoring.model.MentorDTO;
 import pnu.ibe.justice.mentoring.model.MentorFileDTO;
 import pnu.ibe.justice.mentoring.model.Role;
 import pnu.ibe.justice.mentoring.repos.UserRepository;
+import pnu.ibe.justice.mentoring.service.ApplicationState;
 import pnu.ibe.justice.mentoring.service.MentorFileService;
 import pnu.ibe.justice.mentoring.service.MentorService;
 import pnu.ibe.justice.mentoring.service.UserService;
@@ -35,13 +36,16 @@ public class MenMentorController {
     private final MentorFileService mentorFileService;
     private String uploadFolder = "/Users/gim-yeseul/Desktop/mentoring_pj/mentoring/upload/";
     private final UserService userService;
+    private final ApplicationState applicationState;
 
     public MenMentorController(final MentorService mentorService,
-                               final UserRepository userRepository, MentorFileService mentorFileService, UserService userService) {
+                               final UserRepository userRepository, MentorFileService mentorFileService,
+                               UserService userService, ApplicationState applicationState) {
         this.mentorService = mentorService;
         this.userRepository = userRepository;
         this.mentorFileService = mentorFileService;
         this.userService = userService;
+        this.applicationState = applicationState;
     }
 
     @ModelAttribute
@@ -72,6 +76,7 @@ public class MenMentorController {
 
             return "error";
         }
+        model.addAttribute("mentorOpenStatus", applicationState.isMentorOpenStatus()); // 현재 상태 값 전달
         return "pages/mentor-add";
     }
 

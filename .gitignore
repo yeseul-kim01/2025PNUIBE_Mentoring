@@ -6,6 +6,7 @@ build/
 !**/src/test/**/build/
 application-local.yml
 *.log
+src/main/java/pnu/ibe/justice/mentoring/config/PasswordTestConfig.java
 
 ## IntelliJ IDEA
 .idea

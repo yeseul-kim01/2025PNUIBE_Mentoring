@@ -4,9 +4,9 @@
     <title>Login</title>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet" />
-    <link th:href="@{/css/app.css}" rel="stylesheet" />
-    <script th:src="@{/webjars/bootstrap/5.3.3/js/bootstrap.bundle.min.js}" defer></script>
+    <link href="/css/style.css" rel="stylesheet" />
+    <link href="/css/app.css" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" defer></script>
 </head>
 <body class="bg-light">
 <div class="container vh-100 d-flex justify-content-center align-items-center">
@@ -23,13 +23,13 @@
             </div>
 
             <!-- Login Form -->
-            <form th:action="@{/super/login}" method="post">
-                <!-- Email Field -->
+            <form action="/login" method="post">
+                <!-- Username Field -->
                 <div class="mb-3">
-                    <label for="username" class="form-label">Name</label>
+                    <label for="username" class="form-label">사용자 ID</label>
                     <div class="input-group">
-                        <span class="input-group-text"><i class="bi bi-envelope"></i></span>
-                        <input type="text" name="username" id="username" class="form-control" placeholder="Enter your email" required>
+                        <span class="input-group-text"><i class="bi bi-person"></i></span>
+                        <input type="text" name="username" id="username" class="form-control" placeholder="사용자 ID 입력" required>
                     </div>
                 </div>
 
@@ -38,7 +38,7 @@
                     <label for="password" class="form-label">비밀번호</label>
                     <div class="input-group">
                         <span class="input-group-text"><i class="bi bi-lock"></i></span>
-                        <input type="password" name="password" id="password" class="form-control" placeholder="Enter your password" required>
+                        <input type="password" name="password" id="password" class="form-control" placeholder="비밀번호 입력" required>
                     </div>
                 </div>
 
@@ -48,10 +48,10 @@
                 </div>
             </form>
         </div>
-
     </div>
+</div>
 
-    <!-- Bootstrap Icons -->
-    <link th:href="@{https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css}" rel="stylesheet">
+<!-- Bootstrap Icons -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
 </body>
 </html>

@@ -7,21 +7,16 @@
     </head>
     <body>
         <div layout:fragment="content">
-            <h1 class="mb-4">[[#{home.index.headline}]]</h1>
-            <p class="mb-5">[(#{home.index.text})]</p>
+            <h1 class="mb-4">멘토링 프로그램 관리 페이지</h1>
             <div class="col-md-4 mb-5">
-                <h4 class="mb-3">[[#{home.index.exploreEntities}]]</h4>
                 <div class="list-group">
-                    <a th:href="@{/admin/users}" class="list-group-item list-group-item-action">[[#{user.list.headline}]]</a>
-                    <a th:href="@{/admin/mentors}" class="list-group-item list-group-item-action">[[#{mentor.list.headline}]]</a>
-                    <a th:href="@{/admin/mentorFiles}" class="list-group-item list-group-item-action">[[#{mentorFile.list.headline}]]</a>
-                    <a th:href="@{/admin/questions}" class="list-group-item list-group-item-action">[[#{question.list.headline}]]</a>
-                    <a th:href="@{/admin/answers}" class="list-group-item list-group-item-action">[[#{answer.list.headline}]]</a>
-                    <a th:href="@{/admin/notices}" class="list-group-item list-group-item-action">[[#{notice.list.headline}]]</a>
-                    <a th:href="@{/admin/noticeFiles}" class="list-group-item list-group-item-action">[[#{noticeFile.list.headline}]]</a>
-                    <a th:href="@{/admin/questionFiles}" class="list-group-item list-group-item-action">[[#{questionFile.list.headline}]]</a>
-                    <a th:href="@{/admin/answerFiles}" class="list-group-item list-group-item-action">[[#{answerFile.list.headline}]]</a>
-                    <a th:href="@{/admin/userFiles}" class="list-group-item list-group-item-action">[[#{userFile.list.headline}]]</a>
+                    <a th:href="@{/admin/users}" class="list-group-item list-group-item-action">사용자 관리 및 권한 변경</a>
+                    <a th:href="@{/admin/mentors}" class="list-group-item list-group-item-action">멘토 신청서 확인</a>
+                    <a th:href="@{/admin/userFiles}" class="list-group-item list-group-item-action">멘티 신청서 확인</a>
+                    <!--                    <a th:href="@{/admin/mentorFiles}" class="list-group-item list-group-item-action">[[#{mentorFile.list.headline}]]</a>-->
+                    <a th:href="@{/admin/questions}" class="list-group-item list-group-item-action">질문 게시판 관리</a>
+                    <a th:href="@{/admin/answers}" class="list-group-item list-group-item-action">질문 게시판 (답변) 관리</a>
+                    <a th:href="@{/admin/notices}" class="list-group-item list-group-item-action">공지 게시판 편집</a>
                 </div>
             </div>
         </div>

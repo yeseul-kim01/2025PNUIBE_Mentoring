@@ -22,59 +22,44 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-
         http
-                .csrf(
-                        (csrfConfig) -> csrfConfig.disable()
-
-
+                .csrf(csrfConfig -> csrfConfig.disable())
+                .headers(headerConfig -> headerConfig.frameOptions(frameOptionsConfig -> frameOptionsConfig.disable())
+                        .cacheControl(cacheControl -> cacheControl.disable()) // 캐시 비활성화
                 )
-
-
-                .headers(
-                        (headerConfig) -> headerConfig.frameOptions(
-                                frameOptionsConfig -> frameOptionsConfig.disable()
-                        )
-                )
-                .authorizeHttpRequests((authorizeRequest) -> authorizeRequest
-//                        .requestMatchers("/admin/**").hasRole(Role.ADMIN.name())
-                        .requestMatchers("/admin/**","/h2-console/**").hasRole(Role.ADMIN.name())
-                        .requestMatchers("/posts/new", "/comments/save").hasRole(Role.GUEST.name())
-                        .requestMatchers("/","/error", "/login/*","/notice/**","/lectureList/**","/introduce/**","/peopleList/**",
-                                "/logout/*","/favicon.ico","/lib/**", "/css/**","/js/**","/images/**","/scss/**").permitAll()
+                .authorizeHttpRequests(authorizeRequest -> authorizeRequest
+                        .requestMatchers("/admin/**").authenticated() // /admin 접근 시 인증 필요
+                        .requestMatchers("/", "/error", "/login/*", "/notice/**", "/lectureList/**", "/introduce/**",
+                                "/peopleList/**", "/logout/*", "/favicon.ico", "/lib/**", "/css/**", "/js/**",
+                                "/images/**", "/scss/**").permitAll()
                         .anyRequest().authenticated()
                 )
-                .logout( // 로그아웃 성공 시 / 주소로 이동
-                        (logoutConfig) -> logoutConfig.logoutSuccessUrl("/")
+                .formLogin(formLogin -> formLogin
+                        .loginPage("/custom-login")
+                        .loginProcessingUrl("/login") // 로그인 처리 경로 (HTML action과 일치)// 커스텀 로그인 페이지 경로
+                        .defaultSuccessUrl("/admin") // 로그인 성공 후 이동 경로
+                        .failureUrl("/login?error=true") // 로그인 실패 시 이동 경로
+                        .permitAll()
                 )
-
-                // OAuth2 로그인 기능에 대한 여러 설정
-                .oauth2Login(Customizer.withDefaults()) // 아래 코드와 동일한 결과
-
+                .logout(logoutConfig -> logoutConfig
+                        .logoutSuccessUrl("/")
+                        .invalidateHttpSession(true) // 세션 무효화
+                        .deleteCookies("JSESSIONID") // 쿠키 삭제
+                        .permitAll()
+                )
                 .oauth2Login(oauth -> oauth
-                .userInfoEndpoint(userInfoEndpoint -> userInfoEndpoint.userService(customOAuth2UserService))
-                .successHandler((request, response, authentication) -> {
+                        .loginPage("/login") // OAuth2 로그인도 동일한 /login 경로 사용
+                        .userInfoEndpoint(userInfoEndpoint -> userInfoEndpoint.userService(customOAuth2UserService))
+                        .successHandler((request, response, authentication) -> {
                             response.sendRedirect("/");
                         })
-                .failureHandler(((request, response, exception) -> {
-                        System.out.println(exception.toString());
-                        System.out.println(exception.getMessage());
-                        response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-                        response.sendRedirect("/");
-                    }))
-
+                        .failureHandler((request, response, exception) -> {
+                            System.out.println(exception.toString());
+                            System.out.println(exception.getMessage());
+                            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+                            response.sendRedirect("/");
+                        })
                 );
-
-
-
-        /*
-                .oauth2Login(
-                        (oauth) ->
-                            oauth.userInfoEndpoint(
-                                    (endpoint) -> endpoint.userService(customOAuth2UserService)
-                            )
-                );
-        */
 
         return http.build();
     }

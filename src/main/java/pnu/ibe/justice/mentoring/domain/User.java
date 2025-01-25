@@ -1,5 +1,6 @@
 package pnu.ibe.justice.mentoring.domain;
 
+import com.nimbusds.oauth2.sdk.TokenIntrospectionSuccessResponse;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;

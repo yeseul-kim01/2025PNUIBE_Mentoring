@@ -20,10 +20,7 @@ import pnu.ibe.justice.mentoring.model.MentorFileDTO;
 import pnu.ibe.justice.mentoring.model.Role;
 import pnu.ibe.justice.mentoring.model.UserFileDTO;
 import pnu.ibe.justice.mentoring.repos.UserRepository;
-import pnu.ibe.justice.mentoring.service.MentorFileService;
-import pnu.ibe.justice.mentoring.service.MentorService;
-import pnu.ibe.justice.mentoring.service.UserFileService;
-import pnu.ibe.justice.mentoring.service.UserService;
+import pnu.ibe.justice.mentoring.service.*;
 import pnu.ibe.justice.mentoring.util.CustomCollectors;
 import pnu.ibe.justice.mentoring.util.NotFoundException;
 import pnu.ibe.justice.mentoring.util.WebUtils;
@@ -42,14 +39,20 @@ public class MenMenteeFileController {
     private String uploadFolder = "/Users/gim-yeseul/Desktop/mentoring_pj/mentoring/upload/";
     private final UserService userService;
     private final MentorService mentorService;
+    private final ApplicationState applicationState;
+
 
 
     public MenMenteeFileController(final MentorService mentorService,
-                               final UserRepository userRepository, UserFileService userFileService, UserService userService) {
+                               final UserRepository userRepository,
+                                   UserFileService userFileService, UserService userService,
+                                   ApplicationState applicationState) {
         this.userFileService = userFileService;
         this.userRepository = userRepository;
         this.userService = userService;
         this.mentorService = mentorService;
+        this.applicationState = applicationState;
+
     }
 
     @ModelAttribute
@@ -84,6 +87,7 @@ public class MenMenteeFileController {
 
             return "error";
         }
+        model.addAttribute("menteeOpenStatus", applicationState.isMenteeOpenStatus()); // 현재 상태 값 전달
         return "pages/mentee-add";
 
     }

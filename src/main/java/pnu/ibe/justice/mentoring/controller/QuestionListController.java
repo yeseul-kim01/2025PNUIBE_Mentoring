@@ -55,7 +55,7 @@ public class QuestionListController {
     private final UserRepository userRepository;
     private final AnswerService answerService;
 //    String uploadFolder = "/Users/KD-005/IdeaProjects/mentoring/upload/";
-private String uploadFolder = "/Users/gim-yeseul/Desktop/mentoring_pj/mentoring/upload/";
+    private String uploadFolder = "/Users/gim-yeseul/Desktop/mentoring_pj/mentoring/upload/";
 
     public QuestionListController(final QuestionService questionService,
                                   final UserRepository userRepository, final UserService userService, QuestionFileService questionFileService, final AnswerService answerService, QuestionRepository questionRepository) {
@@ -155,7 +155,7 @@ private String uploadFolder = "/Users/gim-yeseul/Desktop/mentoring_pj/mentoring/
     public String detail(Model model, @PathVariable("id") Integer id, @LoginUser SessionUser sessionUser) {
         final UserDTO user = userService.get(sessionUser.getSeqId());
         QuestionDTO question = this.questionService.get(id);
-        List<AnswerDTO> answer = this.answerService.findByQRId(id);
+        List<AnswerUserDTO> answer = this.answerService.getAnswerDetailsByQRId(id);
         model.addAttribute("question",question);
         if (user.getRole() == Role.ADMIN || user.getRole() == Role.MANAGER || Objects.equals(user.getSeqId(), question.getUsers().getSeqId())) {
             if (user.getRole() == Role.ADMIN || user.getRole() == Role.MANAGER) {
@@ -183,13 +183,22 @@ private String uploadFolder = "/Users/gim-yeseul/Desktop/mentoring_pj/mentoring/
         final User users = userRepository.findById(sessionUser.getSeqId())
                 .orElseThrow(() -> new NotFoundException("User not found"));
 
-        AnswerDTO answerDTO = new AnswerDTO();
-        answerDTO.setUsers(users);
-        answerDTO.setQuestion(question);
-        answerDTO.setContent(content);
-        Integer seqId = answerService.create(answerDTO);
-        answerService.update(seqId, answerDTO);
-        return String.format("redirect:/question/detail/%s", id);
+        if (users.getRole() == Role.ADMIN || users.getRole() == Role.MANAGER) {
+            AnswerDTO answerDTO = new AnswerDTO();
+            answerDTO.setUsers(users);
+            answerDTO.setQuestion(question);
+            answerDTO.setContent(content);
+            Integer seqId = answerService.create(answerDTO);
+            answerService.update(seqId, answerDTO);
+            return String.format("redirect:/question/detail/%s", id);
+        }
+        else {
+            model.addAttribute("status","오류");
+            model.addAttribute("error","권한이 없습니다.");
+
+            return "error";
+        }
+
     }
 
 //    @GetMapping("/{mFId}/download")

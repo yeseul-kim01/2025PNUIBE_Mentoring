@@ -5,6 +5,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import pnu.ibe.justice.mentoring.domain.*;
 import pnu.ibe.justice.mentoring.model.AnswerDTO;
+import pnu.ibe.justice.mentoring.model.AnswerUserDTO;
 import pnu.ibe.justice.mentoring.model.SubmitAnswerDTO;
 import pnu.ibe.justice.mentoring.repos.AnswerFileRepository;
 import pnu.ibe.justice.mentoring.repos.AnswerRepository;
@@ -107,6 +108,26 @@ public class AnswerService {
             return referencedWarning;
         }
         return null;
+    }
+
+    public List<AnswerUserDTO> getAnswerDetailsByQRId(Integer qRId) {
+        List<Answer> answers = answerRepository.findAnswersWithUsersByQRId(qRId);
+
+        return answers.stream()
+                .map(answer -> {
+                    AnswerUserDTO dto = new AnswerUserDTO();
+                    dto.setContent(answer.getContent());
+
+                    // 필요한 유저 데이터만 설정
+                    if (answer.getUsers() != null) {
+                        dto.setName(answer.getUsers().getName());
+                        dto.setRole(answer.getUsers().getRole());
+                    }
+
+                    dto.setQRId(answer.getQRId());
+                    return dto;
+                })
+                .toList();
     }
 
 }

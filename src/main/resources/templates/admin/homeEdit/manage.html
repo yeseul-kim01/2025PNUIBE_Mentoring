@@ -1,0 +1,19 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{admin/layout}">
+<head>
+    <title>멘토링 홈페이지 관리</title>
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+</head>
+<body>
+<div layout:fragment="content">
+    <h1 class="mb-4">멘토링 프로그램 관리 페이지</h1>
+    <div class="col-md-4 mb-5">
+        <div class="list-group">
+            <a th:href="@{/admin/mentors/status}" class="list-group-item list-group-item-action">멘토 신청서 접수 기간</a>
+            <a th:href="@{/admin/userFiles/status}" class="list-group-item list-group-item-action">멘티 신청서 접수 기간</a>
+        </div>
+    </div>
+</div>
+</body>
+</html>

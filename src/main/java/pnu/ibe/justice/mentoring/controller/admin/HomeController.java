@@ -38,7 +38,12 @@ public class HomeController {
 
     @GetMapping("/manage")
     public String manage(Model model, @AuthenticationPrincipal UserDetails sessionUser) {
+        if (sessionUser == null) {
+            return "redirect:/login"; // 인증되지 않은 사용자는 로그인 페이지로 리다이렉트
+        }
+        // 상태 값 전달
         model.addAttribute("userName", sessionUser);
+        model.addAttribute("mentorOpenStatus", applicationState.isMentorOpenStatus()); // 현재 상태 값 전달
         return "admin/homeEdit/manage";
     }
 

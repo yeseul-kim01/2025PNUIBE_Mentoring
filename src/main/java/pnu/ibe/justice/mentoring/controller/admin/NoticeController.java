@@ -34,12 +34,12 @@ public class NoticeController {
     private final NoticeFileService noticeFileService;
     private String uploadFolder = "/Users/gim-yeseul/Desktop/mentoring_pj/mentoring/upload/";
 
-    @ModelAttribute("sessionuser")
-    public SessionUser getSettings(@LoginUser SessionUser user) {
-        System.out.println("success mentorcontroller session user connection");
-        System.out.println(user.getSeqId());
-        return user;
-    }
+//    @ModelAttribute("sessionuser")
+//    public SessionUser getSettings(@LoginUser SessionUser user) {
+//        System.out.println("success mentorcontroller session user connection");
+//        System.out.println(user.getSeqId());
+//        return user;
+//    }
 
     public NoticeController(final NoticeService noticeService,
                             final UserRepository userRepository, NoticeFileService noticeFileService) {
@@ -67,7 +67,7 @@ public class NoticeController {
     }
 
     @PostMapping("/add")
-    public String add(@ModelAttribute("notice") @Valid final NoticeDTO noticeDTO, @LoginUser SessionUser user,
+    public String add(@ModelAttribute("notice") @Valid final NoticeDTO noticeDTO,
             final BindingResult bindingResult, final RedirectAttributes redirectAttributes) {
         if (bindingResult.hasErrors()) {
             return "admin/notice/add";
@@ -78,7 +78,7 @@ public class NoticeController {
         }
         Integer seqId = noticeService.create(noticeDTO);
         if (noticeDTO.getFile() != null) {
-            NoticeFileDTO noticeFileDTO = new NoticeFileDTO(seqId,fileUrl,user.getSeqId(),seqId);
+            NoticeFileDTO noticeFileDTO = new NoticeFileDTO(seqId,fileUrl,noticeDTO.getUsers().getSeqId(),seqId);
             Integer noticeFileId = noticeFileService.create(noticeFileDTO);
             noticeDTO.setMFId(noticeFileId);
         }

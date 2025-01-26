@@ -31,4 +31,5 @@ gradlew bootBuildImage --imageName=pnu.ibe.justice/mentoring
 
 ## Further readings
 
-1. question answer -> user 명 안 보임.
+1. question answer -> user 명 안 보임. (해결)
+2. systemUser 접근이 모든 페이지에서 진행됨 ->시큐리티 설정 바꿔야될 듯 . admin/** 으로 접근할 때만 formlogin 으로 들어가야 됨.

@@ -1,7 +1,10 @@
 package pnu.ibe.justice.mentoring.model;
 
+import jakarta.persistence.Column;
 import jakarta.validation.constraints.Size;
 import lombok.*;
+
+import java.util.UUID;
 
 
 @Getter
@@ -13,12 +16,12 @@ public class NoticeFileDTO {
 
     private Integer seqId;
 
-
     @Size(max = 255)
     private String fileSrc;
 
-//    @Size(max = 255)
-//    private String type;
+    private UUID uuid;
+
+    private String filename;
 
     private Integer userSeqId;
 

@@ -52,12 +52,9 @@ public class MenNoticeFileController {
 
         NoticeFile noticeFile = noticeFileService.findFileById(mFId);
         String noticeFileName = noticeFile.getFileSrc();
-        DateTimeFormatter outputFormatter = DateTimeFormatter.ofPattern("yyyy");
-        String noticefolder = "notice/";
-        String formattedDate = noticeFile.getDateCreated().format(outputFormatter);
-        File file = new File(uploadFolder + formattedDate +"/" + noticefolder + noticeFileName);
+        File file = new File(uploadFolder+noticeFileName);
         UrlResource urlResource = new UrlResource(file.toURI());
-        String encodedUploadFileName = UriUtils.encode(noticeFileName, StandardCharsets.UTF_8);
+        String encodedUploadFileName = UriUtils.encode(noticeFile.getFilename(), StandardCharsets.UTF_8);
         String contentDisposition = "attachment;  filename=\""  + encodedUploadFileName + "\"";
         System.out.println(contentDisposition);
 

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" xmlns:c="" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout-main}">
 <head>
-  <title>Index Page</title>
+  <title>Notice</title>
   <style>
     .notice-content {
       max-width: 100%;
@@ -34,13 +34,20 @@
       <div th:utext="${notice.content}"></div>
     </div>
     <!-- 첨부파일 다운로드 버튼 -->
-    <div class="mb-4"  th:if="${notice.getMFId() != null}">
-      <a th:href="|/notice/noticeFiles/${notice.mFId}/download|"
+    <div class="mb-4"  th:if="${noticeFiles != null}">
+      <!--각 첨부파일들 마다 다운로드 받을수 있게 하기-->
+      <a th:each="noticefile : ${noticeFiles}">
+      <a th:href="|/notice/noticeFiles/${noticefile.seqId}/download|"
          class="btn btn-outline-primary d-flex align-items-center"
          hx-no-boost="true" download target="_blank">
         <i class="fa fa-download mr-2"></i>
-        <span th:text="${filename}">Download File</span>
+        <span th:text="${noticefile.filename}">Download File</span>
       </a>
+      </a>
+      <!--전체 다운로드 받기 < zip 으로 묶어서 > -->
+      <a th:href="|/admin/noticeFiles/${notice.seqId}/download|" class="btn btn-outline-primary d-flex align-items-center"
+         hx-no-boost="true" download target="_blank"><i class="fa fa-download mr-2"></i>
+        <span>전체 파일 다운로드 받기</span></a>
     </div>
     <div>
       <a th:href="@{/notice}" class="btn btn-secondary">[[#{notice.add.back}]]</a>

@@ -11,6 +11,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.util.UriUtils;
 import pnu.ibe.justice.mentoring.domain.MentorFile;
@@ -19,13 +20,18 @@ import pnu.ibe.justice.mentoring.domain.NoticeFile;
 import pnu.ibe.justice.mentoring.model.NoticeFileDTO;
 import pnu.ibe.justice.mentoring.repos.NoticeRepository;
 import pnu.ibe.justice.mentoring.service.NoticeFileService;
+import pnu.ibe.justice.mentoring.service.NoticeService;
 import pnu.ibe.justice.mentoring.util.CustomCollectors;
 import pnu.ibe.justice.mentoring.util.WebUtils;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.net.MalformedURLException;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 
 
 @Controller
@@ -37,9 +43,10 @@ public class NoticeFileController {
     private String uploadFolder = "/Users/gim-yeseul/Desktop/mentoring_pj/mentoring/upload/";
 
     public NoticeFileController(final NoticeFileService noticeFileService,
-            final NoticeRepository noticeRepository) {
+                                final NoticeRepository noticeRepository, NoticeService noticeService) {
         this.noticeFileService = noticeFileService;
         this.noticeRepository = noticeRepository;
+        this.noticeService = noticeService;
     }
 
     @ModelAttribute
@@ -55,24 +62,40 @@ public class NoticeFileController {
         return "admin/noticeFile/list";
     }
 
-    @GetMapping("/{mFId}/download")
-    public ResponseEntity<Resource> downloadFile(@PathVariable Integer mFId, @RequestHeader(value = "Hx-Request", required = false) String hxRequestHeader) throws MalformedURLException {
+    @GetMapping("/{seqId}/download")
+    public ResponseEntity<StreamingResponseBody> downloadFile(@PathVariable Integer seqId, @RequestHeader(value = "Hx-Request", required = false) String hxRequestHeader) throws IOException {
 
-        NoticeFile noticeFile = noticeFileService.findFileById(mFId);
-        String noticeFileName = noticeFile.getFileSrc();
-        DateTimeFormatter outputFormatter = DateTimeFormatter.ofPattern("yyyy/MM/dd");
-        String formattedDate = noticeFile.getDateCreated().format(outputFormatter);
-        File file = new File(uploadFolder + formattedDate +"/" + noticeFileName);
-        UrlResource urlResource = new UrlResource(file.toURI());
-        String encodedUploadFileName = UriUtils.encode(noticeFileName, StandardCharsets.UTF_8);
-        String contentDisposition = "attachment;  filename=\""  + encodedUploadFileName + "\"";
-        System.out.println(contentDisposition);
+
+        List<NoticeFileDTO> noticeFiles = noticeFileService.findFileByseqId(seqId);
+        String fileName = noticeService.get(seqId).getTitle();
+
+        File zipFile = noticeFileService.createZipFile(fileName,seqId, noticeFiles);
+            // StreamingResponseBody로 파일 스트림 반환
+        StreamingResponseBody stream = outputStream -> {
+            try (FileInputStream fis = new FileInputStream(zipFile)) {
+                byte[] buffer = new byte[1024];
+                int bytesRead;
+                while ((bytesRead = fis.read(buffer)) != -1) {
+                    outputStream.write(buffer, 0, bytesRead);
+                }
+                outputStream.flush();
+            } finally {
+                // 파일 삭제
+                Files.deleteIfExists(zipFile.toPath());
+                System.out.println("Temporary ZIP file deleted: " + zipFile.getName());
+            }
+        };
+
+        // HTTP 응답 설정
+        String encodedFileName = UriUtils.encode(zipFile.getName(), StandardCharsets.UTF_8);
+        String contentDisposition = "attachment; filename=\"" + encodedFileName + "\"";
 
         return ResponseEntity.ok()
                 .contentType(MediaType.APPLICATION_OCTET_STREAM)
                 .header(HttpHeaders.CONTENT_DISPOSITION, contentDisposition)
-                .body(urlResource);
+                .body(stream);
     }
+
 
     @GetMapping("/add")
     public String add(@ModelAttribute("noticeFile") final NoticeFileDTO noticeFileDTO) {
@@ -116,4 +139,5 @@ public class NoticeFileController {
         return "redirect:/admin/noticeFiles";
     }
 
+    private final NoticeService noticeService;
 }

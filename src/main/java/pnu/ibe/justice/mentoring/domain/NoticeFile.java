@@ -11,11 +11,16 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import java.time.OffsetDateTime;
+import java.util.UUID;
+
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-
+@Setter
+@Getter
 @Entity
 @Table(name = "NoticeFiles")
 @EntityListeners(AuditingEntityListener.class)
@@ -28,6 +33,12 @@ public class NoticeFile {
 
     @Column
     private String fileSrc;
+
+    @Column
+    private UUID uuid;
+
+    @Column
+    private String filename;
 
     @Column
     private String type;
@@ -46,61 +57,5 @@ public class NoticeFile {
     @LastModifiedDate
     @Column(nullable = false)
     private OffsetDateTime lastUpdated;
-
-    public Integer getSeqId() {
-        return seqId;
-    }
-
-    public void setSeqId(final Integer seqId) {
-        this.seqId = seqId;
-    }
-
-    public String getFileSrc() {
-        return fileSrc;
-    }
-
-    public void setFileSrc(final String fileSrc) {
-        this.fileSrc = fileSrc;
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    public void setType(final String type) {
-        this.type = type;
-    }
-
-    public Integer getUserSeqId() {
-        return userSeqId;
-    }
-
-    public void setUserSeqId(final Integer userSeqId) {
-        this.userSeqId = userSeqId;
-    }
-
-    public Notice getNotice() {
-        return notice;
-    }
-
-    public void setNotice(final Notice notice) {
-        this.notice = notice;
-    }
-
-    public OffsetDateTime getDateCreated() {
-        return dateCreated;
-    }
-
-    public void setDateCreated(final OffsetDateTime dateCreated) {
-        this.dateCreated = dateCreated;
-    }
-
-    public OffsetDateTime getLastUpdated() {
-        return lastUpdated;
-    }
-
-    public void setLastUpdated(final OffsetDateTime lastUpdated) {
-        this.lastUpdated = lastUpdated;
-    }
 
 }

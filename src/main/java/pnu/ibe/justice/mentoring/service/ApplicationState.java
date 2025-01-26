@@ -11,5 +11,4 @@ public class ApplicationState {
     private boolean mentorOpenStatus;
     private boolean menteeOpenStatus;
 
-
 }

@@ -18,9 +18,6 @@ public class NoticeDTO {
     @Size(max = 255)
     private String title;
 
-    @JsonProperty("mFId")
-    private Integer mFId;
-
     @NotNull
     private String content;
 
@@ -33,6 +30,6 @@ public class NoticeDTO {
     private User users;
 
     //private MentorFileDTO noticeFile;
-    private MultipartFile file;
+    private MultipartFile[] file;
 
 }

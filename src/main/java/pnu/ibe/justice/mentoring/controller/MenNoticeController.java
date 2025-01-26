@@ -65,9 +65,12 @@ public class MenNoticeController {
     public String detail(Model model, @PathVariable("id") Integer id) {
         NoticeDTO notice = this.noticeService.get(id);
         model.addAttribute("notice",notice);
-        System.out.println(notice.getMFId());
-        if (notice.getMFId()!=null) {
-            model.addAttribute("filename", noticeFileService.get(notice.getMFId()).getFileSrc());
+//        if (notice.getMFId()!=null) {
+//            model.addAttribute("filename", noticeFileService.get(notice.getMFId()).getFileSrc());
+//        }
+        List<NoticeFileDTO> noticeFileDTOS = this.noticeFileService.findFileByseqId(id);
+        if (noticeFileDTOS != null) {
+            model.addAttribute("noticeFiles",noticeFileDTOS);
         }
         return "pages/noticeDetail";
     }

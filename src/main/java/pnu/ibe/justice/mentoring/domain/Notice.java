@@ -60,9 +60,4 @@ public class Notice {
     @Column(nullable = false)
     private OffsetDateTime lastUpdated;
 
-    @Column
-    private Integer mFId;
-
-
-
 }

@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import pnu.ibe.justice.mentoring.config.auth.LoginUser;
 import pnu.ibe.justice.mentoring.config.auth.SessionUser;
@@ -24,6 +25,9 @@ import pnu.ibe.justice.mentoring.util.ReferencedWarning;
 import pnu.ibe.justice.mentoring.util.WebUtils;
 import pnu.ibe.justice.mentoring.model.NoticeFileDTO;
 
+import java.util.List;
+import java.util.Map;
+
 
 @Controller
 @RequestMapping("/admin/notices")
@@ -32,7 +36,6 @@ public class NoticeController {
     private final NoticeService noticeService;
     private final UserRepository userRepository;
     private final NoticeFileService noticeFileService;
-    private String uploadFolder = "/Users/gim-yeseul/Desktop/mentoring_pj/mentoring/upload/";
 
 //    @ModelAttribute("sessionuser")
 //    public SessionUser getSettings(@LoginUser SessionUser user) {
@@ -72,17 +75,7 @@ public class NoticeController {
         if (bindingResult.hasErrors()) {
             return "admin/notice/add";
         }
-        String fileUrl = null;
-        if (noticeDTO.getFile() != null) {
-             fileUrl = noticeService.saveFile(noticeDTO.getFile(), uploadFolder);
-        }
-        Integer seqId = noticeService.create(noticeDTO);
-        if (noticeDTO.getFile() != null) {
-            NoticeFileDTO noticeFileDTO = new NoticeFileDTO(seqId,fileUrl,noticeDTO.getUsers().getSeqId(),seqId);
-            Integer noticeFileId = noticeFileService.create(noticeFileDTO);
-            noticeDTO.setMFId(noticeFileId);
-        }
-        noticeService.update(seqId, noticeDTO);
+        noticeService.createNotice(noticeDTO);
         redirectAttributes.addFlashAttribute(WebUtils.MSG_SUCCESS, WebUtils.getMessage("mentor.create.success"));
         return "redirect:/admin/notices";
     }

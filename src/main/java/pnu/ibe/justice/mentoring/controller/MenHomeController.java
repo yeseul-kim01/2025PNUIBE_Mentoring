@@ -12,6 +12,7 @@ import pnu.ibe.justice.mentoring.config.auth.SessionUser;
 import pnu.ibe.justice.mentoring.domain.Notice;
 import pnu.ibe.justice.mentoring.domain.User;
 import pnu.ibe.justice.mentoring.model.NoticeDTO;
+import pnu.ibe.justice.mentoring.service.HomeEditService;
 import pnu.ibe.justice.mentoring.service.NoticeService;
 
 import java.awt.print.Pageable;
@@ -27,6 +28,8 @@ public class MenHomeController {
 
     private final NoticeService noticeService;
 
+    private final HomeEditService homeEditService;
+
 
     @ModelAttribute("user")
     public SessionUser getSettings(@LoginUser SessionUser user) {
@@ -39,6 +42,7 @@ public class MenHomeController {
         List<NoticeDTO> noticeIsmust = noticeService.findNoticeByIsmust(Boolean.TRUE);
         // null 체크 후 모델에 값 추가
         model.addAttribute("noticeIsMustList", noticeIsmust);
+        model.addAttribute("homeEdits",homeEditService.findAll());
         return "index";
     }
 

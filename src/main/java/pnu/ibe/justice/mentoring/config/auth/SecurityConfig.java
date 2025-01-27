@@ -7,8 +7,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import pnu.ibe.justice.mentoring.config.auth.CustomAuthenticationFilter;
 import pnu.ibe.justice.mentoring.config.auth.CustomOAuth2UserService;
 
 @Configuration
@@ -17,48 +15,50 @@ import pnu.ibe.justice.mentoring.config.auth.CustomOAuth2UserService;
 public class SecurityConfig {
 
     private final CustomOAuth2UserService customOAuth2UserService;
-//    private final CustomAuthenticationFilter customAuthenticationFilter;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http
-                .csrf(csrfConfig -> csrfConfig.disable())
-                .headers(headerConfig -> headerConfig.frameOptions(frameOptionsConfig -> frameOptionsConfig.disable())
-                        .cacheControl(cacheControl -> cacheControl.disable()) // 캐시 비활성화
+        // 공통 설정
+        http.csrf(csrf -> csrf.disable())
+                .headers(headers -> headers.frameOptions(frame -> frame.disable())
+                        .cacheControl(cache -> cache.disable()));
+
+        // /admin/** 경로에 대한 Form Login 설정
+        http.authorizeHttpRequests(authorize -> authorize
+                        .requestMatchers("/admin/**").authenticated() // /admin/** 인증 필요
                 )
-                .authorizeHttpRequests(authorizeRequest -> authorizeRequest
-                        .requestMatchers("/admin/**").authenticated() // /admin/** 접근 시 인증 필요
-                        .requestMatchers("/", "/error", "/login/*", "/notice/**", "/lectureList/**", "/introduce/**",
+                .formLogin(form -> form
+                        .loginPage("/custom-login") // 사용자 지정 로그인 페이지
+                        .loginProcessingUrl("/login") // 로그인 처리 URL
+                        .defaultSuccessUrl("/admin") // 로그인 성공 후 이동
+                        .failureUrl("/custom-login?error=true") // 로그인 실패 시 이동
+                        .permitAll()
+                );
+
+        // 그 외 경로에 대한 OAuth2 Login 설정
+        http.authorizeHttpRequests(authorize -> authorize
+                        .requestMatchers("/", "/error", "/notice/**", "/lectureList/**", "/introduce/**",
                                 "/peopleList/**", "/logout/*", "/favicon.ico", "/lib/**", "/css/**", "/js/**",
-                                "/images/**", "/scss/**").permitAll()
-                        .anyRequest().authenticated()
-                )
-                .formLogin(formLogin -> formLogin
-                        .loginPage("/custom-login")
-                        .loginProcessingUrl("/login") // formLogin 처리 경로
-                        .defaultSuccessUrl("/admin") // 로그인 성공 후 이동 경로
-                        .failureUrl("/login?error=true") // 로그인 실패 시 이동 경로
-                        .permitAll()
-                )
-                .logout(logoutConfig -> logoutConfig
-                        .logoutSuccessUrl("/")
-                        .permitAll()
+                                "/images/**", "/scss/**").permitAll() // 공개 경로
+                        .anyRequest().authenticated() // 그 외 모든 요청 인증 필요
                 )
                 .oauth2Login(oauth -> oauth
-                        .loginPage("/login") // OAuth2 로그인 경로
-                        .userInfoEndpoint(userInfoEndpoint -> userInfoEndpoint.userService(customOAuth2UserService))
+                        .loginPage("/login") // OAuth2 로그인 페이지
+                        .userInfoEndpoint(userInfo -> userInfo.userService(customOAuth2UserService))
                         .successHandler((request, response, authentication) -> {
-                            response.sendRedirect("/");
+                            response.sendRedirect("/"); // 로그인 성공 후 이동
                         })
                         .failureHandler((request, response, exception) -> {
-                            System.out.println(exception.toString());
-                            System.out.println(exception.getMessage());
                             response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-                            response.sendRedirect("/");
+                            response.sendRedirect("/login?error=true"); // 로그인 실패 시 이동
                         })
                 );
-                // 필터 체인에 CustomAuthenticationFilter 추가
-//                .addFilterBefore(customAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+
+        // 로그아웃 설정
+        http.logout(logout -> logout
+                .logoutSuccessUrl("/") // 로그아웃 성공 후 이동
+                .permitAll()
+        );
 
         return http.build();
     }

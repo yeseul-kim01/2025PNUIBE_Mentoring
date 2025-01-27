@@ -142,6 +142,8 @@ public class NoticeService {
                 .orElseThrow(NotFoundException::new);
     }
 
+
+    //사용성이 빈번하지 않을 떄, 데이터가 정확하게 들어가야 될 때가 주 목적 (예를 들어, 수강신청 같은 거 )
     @Transactional
     public void createNotice(final NoticeDTO noticeDTO) {
         Integer noticeId = create(noticeDTO);

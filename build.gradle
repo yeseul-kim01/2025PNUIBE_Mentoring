@@ -44,6 +44,15 @@ dependencies {
     implementation ('nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect')
     annotationProcessor ('org.projectlombok:lombok')
 
+    // Spring Security
+    implementation ('org.springframework.boot:spring-boot-starter-security')
+
+    implementation ('org.springframework.security:spring-security-oauth2-authorization-server')
+
+    implementation ('org.springframework.boot:spring-boot-starter-cache')
+    implementation ('net.sf.ehcache:ehcache:2.10.3')
+
+
 
 }
 

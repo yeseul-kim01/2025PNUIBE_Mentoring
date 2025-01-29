@@ -12,69 +12,6 @@
       document.getElementById("schedulePopup").style.display = "none";
       document.getElementById("overlay").style.display = "none";
     }
-    //
-    // // 페이지 로드 시 팝업 자동 표시
-    // window.onload = function() {
-    //   openModal();  // 페이지 로드 후 팝업 자동 표시
-    // }
-
-    // // 팝업 열기 함수 (모달)
-    // function openModal() {
-    //   document.getElementById("myModal").style.display = "block";
-    // }
-    //
-    // // 팝업 닫기 함수 (모달)
-    // function closePop() {
-    //   document.getElementById("myModal").style.display = "none";
-    // }
-    //
-    // var toggleMainPopup = function() {
-    //
-    //   /* 쿠키 제어 함수 정의 */
-    //   var handleCookie = {
-    //     // 쿠키 쓰기
-    //     // 이름, 값, 만료일
-    //     setCookie: function (name, val, exp) {
-    //       var date = new Date();
-    //
-    //       // 만료 시간 구하기(exp를 ms단위로 변경)
-    //       date.setTime(date.getTime() + exp * 24 * 60 * 60 * 1000);
-    //       console.log(name + "=" + val + ";expires=" + date.toUTCString() + ";path=/");
-    //
-    //       // 실제로 쿠키 작성하기
-    //       document.cookie = name + "=" + val + ";expires=" + date.toUTCString() + ";";
-    //     },
-    //     // 쿠키 읽어오기(정규식 이용해서 가져오기)
-    //     getCookie: function (name) {
-    //       var value = document.cookie.match("(^|;) ?" + name + "=([^;]*)(;|$)");
-    //       return value ? value[2] : null;
-    //     }
-    //   };
-    //   console.log(handleCookie.getCookie("today"));
-    //
-    //   // 쿠키 읽고 화면 보이게
-    //   if (handleCookie.getCookie("today") == "y") {
-    //     $(".main_popup").removeClass("on");
-    //   } else {
-    //     $(".main_popup").addClass("on");
-    //   }
-    //
-    //   // 오늘하루 보지 않기 버튼
-    //   $(".main_popup").on("click", ".btn_today_close", function () {
-    //     handleCookie.setCookie("today", "y", 1);
-    //     $(this).parents(".main_popup.on").removeClass("on");
-    //   });
-    //
-    //   // 일반 버튼
-    //   $(".main_popup").on("click", ".btn_close", function () {
-    //     $(this).parents(".main_popup.on").removeClass("on");
-    //   });
-    // }
-    //
-    // $(function() {
-    //   toggleMainPopup();
-    // });
-
   </script>
   <style>
     /* 기존 스타일 유지 */
@@ -252,55 +189,19 @@
               <h2 class="sec-title" onclick="openSchPop();">일정</h2>
             </header>
             <div class="sec-body">
-              <ul class="schedule-list" style="height: 220px">
-                <li><span class="list-date">2024-09-02 (월) ~ 2024-09-08 (일)</span> <span class="subject">1차 커리큘럼 계획서 제출</span></li>
-                <li><span class="list-date">2024-09-03 (화) ~ 2024-09-08 (일)</span> <span class="subject">1주차</span></li>
-                <li><span class="list-date">2024-09-09 (월) ~ 2024-09-15 (일)</span> <span class="subject">2주차</span></li>
-                <li><span class="list-date">2024-09-16 (월) ~ 2024-09-22 (일)</span> <span class="subject">3주차</span></li>
-                <li><span class="list-date">2024-09-23 (월) ~ 2024-09-29 (일)</span> <span class="subject">4주차</span></li>
-                <li><span class="list-date">2024-09-30 (월) ~ 2024-10-06 (일)</span> <span class="subject">5주차</span></li>
-                <li><span class="list-date">2024-10-07 (월) ~ 2024-10-11 (금)</span> <span class="subject">6주차</span></li>
-                <li><span class="list-date">2024-10-12 (토) ~ 2024-10-15 (화)</span> <span class="subject">중간보고서 제출</span></li>
-                <li><span class="list-date">2024-10-20 (일) ~ 2024-10-27 (일)</span> <span class="subject">중간 점검 날짜</span></li>
-                <li><span class="list-date">2024-10-29 (화) ~ 2024-10-29 (화)</span> <span class="subject">산업체 멘토링 강사와 대면 점검</span></li>
-                <li><span class="list-date">2024-10-30 (수) ~ 2024-11-02 (토)</span> <span class="subject">2차 커리큘럼 계획서 제출</span></li>
-                <li><span class="list-date">2024-11-04 (월) ~ 2024-11-10 (일)</span> <span class="subject">2주차</span></li>
-                <li><span class="list-date">2024-11-11 (월) ~ 2024-11-17 (일)</span> <span class="subject">3주차</span></li>
-                <li><span class="list-date">2024-11-18 (월) ~ 2024-11-24 (일)</span> <span class="subject">4주차</span></li>
-                <li><span class="list-date">2024-11-25 (월) ~ 2024-12-01 (일)</span> <span class="subject">5주차</span></li>
-                <li><span class="list-date">2024-12-02 (월) ~ 2024-12-06 (금)</span> <span class="subject">6주차, 최종 보고서 제출</span></li>
-                <li><span class="list-date">2024-12-07 (토) ~ 2024-12-09 (월)</span> <span class="subject">최종 프로젝트 결과물 제출</span></li>
-                <li><span class="list-date">2024-12-13 (금)</span> <span class="subject">결과물 평가 및 성적 발표</span></li>
+              <ul class="schedule-list" style="height: 220px" th:utext="${homeEdits[1].mainHome_content}">
               </ul>
             </div>
           </div>
         </div>
-        <!-- 팝업 레이아웃 -->
         <div id="overlay" onclick="closeSchPop()"></div>
         <div id="schedulePopup">
           <span class="close-btn" onclick="closeSchPop();">&times;</span>
           <h3>일정 자세히 보기</h3>
-          <ul class="schedule-list">
-            <li><span class="list-date">2024-08-29 (목) ~ 2024-08-31 (토)</span> <span class="subject">1차 커리큘럼 계획서 제출</span></li>
-            <li><span class="list-date">2024-09-02 (월) ~ 2024-09-08 (일)</span> <span class="subject">1주차</span></li>
-            <li><span class="list-date">2024-09-09 (월) ~ 2024-09-15 (일)</span> <span class="subject">2주차</span></li>
-            <li><span class="list-date">2024-09-16 (월) ~ 2024-09-22 (일)</span> <span class="subject">3주차</span></li>
-            <li><span class="list-date">2024-09-23 (월) ~ 2024-09-29 (일)</span> <span class="subject">4주차</span></li>
-            <li><span class="list-date">2024-09-30 (월) ~ 2024-10-06 (일)</span> <span class="subject">5주차</span></li>
-            <li><span class="list-date">2024-10-07 (월) ~ 2024-10-11 (금)</span> <span class="subject">6주차</span></li>
-            <li><span class="list-date">2024-10-12 (토) ~ 2024-10-15 (화)</span> <span class="subject">중간보고서 제출</span></li>
-            <li><span class="list-date">2024-10-20 (일) ~ 2024-10-27 (일)</span> <span class="subject">중간 점검 날짜</span></li>
-            <li><span class="list-date">2024-10-30 (수) ~ 2024-11-02 (토)</span> <span class="subject">2차 커리큘럼 계획서 제출</span></li>
-            <li><span class="list-date">2024-11-04 (월) ~ 2024-11-10 (일)</span> <span class="subject">2주차</span></li>
-            <li><span class="list-date">2024-11-11 (월) ~ 2024-11-17 (일)</span> <span class="subject">3주차</span></li>
-            <li><span class="list-date">2024-11-18 (월) ~ 2024-11-24 (일)</span> <span class="subject">4주차</span></li>
-            <li><span class="list-date">2024-11-25 (월) ~ 2024-12-01 (일)</span> <span class="subject">5주차</span></li>
-            <li><span class="list-date">2024-12-02 (월) ~ 2024-12-06 (금)</span> <span class="subject">6주차, 최종 보고서 제출</span></li>
-            <li><span class="list-date">2024-12-07 (토) ~ 2024-12-09 (월)</span> <span class="subject">최종 프로젝트 결과물 제출</span></li>
-            <li><span class="list-date">2024-12-13 (금)</span> <span class="subject">결과물 평가 및 성적 발표</span></li>
+          <ul class="schedule-list" th:utext="${homeEdits[1].mainHome_content}">
+
           </ul>
         </div>
-        <!-- 두 번째 col (운동장/헬스장 예약) -->
         <div class="col-lg-6 col-md-12 pb-1" >
           <div class="bg-light shadow-sm border-top rounded mb-4 facility-item sec-smart-schedule" >
             <header>

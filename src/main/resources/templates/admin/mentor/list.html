@@ -50,7 +50,7 @@
                 <td>
                     <div class="float-end text-nowrap">
                         <a th:href="@{/admin/mentors/edit/{seqId}(seqId=${mentor.seqId})}" class="btn btn-sm btn-secondary">[[#{mentor.list.edit}]]</a>
-                        <form th:action="@{/mentors/delete/{seqId}(seqId=${mentor.seqId})}"
+                        <form th:action="@{/admin/mentors/delete/{seqId}(seqId=${mentor.seqId})}"
                               th:hx-confirm="#{delete.confirm}" method="post" class="d-inline">
                             <button type="submit" class="btn btn-sm btn-secondary">[[#{mentor.list.delete}]]</button>
                         </form>

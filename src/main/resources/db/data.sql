@@ -31,3 +31,7 @@ insert into home_edits value (1,'mainpage_1','2025년 멘토링 프로그램'),
 (5,'mainpage_footer_email','pnuibe.justice1@gmail.com'),
 (6, 'mainpage_footer_instagram','https://www.instagram.com/pnu_ibe/');
 
+
+insert into users values(0,4350494,2,now(),now(),'장전캠퍼스','정보의생명공학대학 정보컴퓨터공학부','yes0718@pusan.ac.kr','김예슬','394098','0','GUEST');
+
+

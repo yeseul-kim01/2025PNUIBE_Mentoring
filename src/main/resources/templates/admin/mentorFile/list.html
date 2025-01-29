@@ -31,7 +31,7 @@
                 <td>
                     <div class="float-end text-nowrap">
                         <a th:href="@{/admin/mentorFiles/edit/{seqId}(seqId=${mentorFile.seqId})}" class="btn btn-sm btn-secondary">[[#{mentorFile.list.edit}]]</a>
-                        <form th:action="@{/mentorFiles/delete/{seqId}(seqId=${mentorFile.seqId})}"
+                        <form th:action="@{/admin/mentorFiles/delete/{seqId}(seqId=${mentorFile.seqId})}"
                               th:hx-confirm="#{delete.confirm}" method="post" class="d-inline">
                             <button type="submit" class="btn btn-sm btn-secondary">[[#{mentorFile.list.delete}]]</button>
                         </form>

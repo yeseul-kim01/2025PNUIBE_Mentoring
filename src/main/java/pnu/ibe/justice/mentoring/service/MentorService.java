@@ -132,7 +132,6 @@ public class MentorService {
     }
 
     private Mentor mapToEntity(final MentorDTO mentorDTO, final Mentor mentor) {
-        // Check if each field is not null before setting the value
         if (mentorDTO.getTitle() != null) {
             mentor.setTitle(mentorDTO.getTitle());
         }

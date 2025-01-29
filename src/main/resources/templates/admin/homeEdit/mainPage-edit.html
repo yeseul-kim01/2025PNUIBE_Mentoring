@@ -1,10 +1,25 @@
-<!DOCTYPE html>
-<html lang="en">
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{admin/layout}">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Home-Edit</title>
 </head>
-<body>
 
+<body>
+<div layout:fragment="content">
+    <div class="d-flex flex-wrap mb-4">
+        <h1 class="flex-grow-1">home Edit [[${homeEdit.contentType}]]</h1>
+        <div>
+            <a th:href="@{/admin/homeEdits}" class="btn btn-secondary">Back</a>
+        </div>
+    </div>
+    <form th:action="${requestUri}" method="post">
+        <div th:replace="~{fragments/forms::inputRow(object='homeEdit', field='seqId', disabled=true, type='number')}" />
+        <div th:replace="~{fragments/forms::inputRow(object='homeEdit', field='contentType', disabled=true, type='textarea')}" />
+        <div th:replace="~{fragments/forms::inputRow(object='homeEdit', field='mainHome_content', type='textarea')}" />
+        <input type="submit" th:value="EDIT" class="btn btn-primary mt-4" />
+    </form>
+</div>
 </body>
 </html>

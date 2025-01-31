@@ -53,19 +53,20 @@ public class SubmitController {
     private String uploadFolder = "/Users/gim-yeseul/Desktop/mentoring_pj/mentoring/upload/";
     private final UserService userService;
     private final MentorService mentorService;
-    private final MentorRepository mentorRepository;
     private final SubmitAnswerService submitAnswerService;
+    private final HomeEditService homeEditService;
 
     public SubmitController(final SubmitService submitService,
-                            final UserRepository userRepository, SubmitFileService submitFileService, UserService userService, MentorService mentorService, MentorRepository mentorRepository, SubmitAnswerService submitAnswerService, SubmitReportRepository submitReportRepository) {
+                            final UserRepository userRepository, SubmitFileService submitFileService, UserService userService, MentorService mentorService , SubmitAnswerService submitAnswerService,
+                            SubmitReportRepository submitReportRepository,HomeEditService homeEditService ) {
         this.submitService = submitService;
         this.userRepository = userRepository;
         this.submitFileService = submitFileService;
         this.userService = userService;
         this.mentorService = mentorService;
-        this.mentorRepository = mentorRepository;
         this.submitAnswerService = submitAnswerService;
         this.submitReportRepository = submitReportRepository;
+        this.homeEditService = homeEditService;
     }
 
     @ModelAttribute
@@ -73,6 +74,7 @@ public class SubmitController {
         model.addAttribute("usersValues", userRepository.findAll(Sort.by("seqId"))
                 .stream()
                 .collect(CustomCollectors.toSortedMap(User::getSeqId, User::getEmail)));
+        model.addAttribute("homeEdits",homeEditService.findAll());
     }
 
 

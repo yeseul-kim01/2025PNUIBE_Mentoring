@@ -11,6 +11,7 @@ import pnu.ibe.justice.mentoring.model.MentorDTO;
 import pnu.ibe.justice.mentoring.model.NoticeDTO;
 import pnu.ibe.justice.mentoring.repos.MentorRepository;
 import pnu.ibe.justice.mentoring.repos.UserRepository;
+import pnu.ibe.justice.mentoring.service.HomeEditService;
 import pnu.ibe.justice.mentoring.service.MentorService;
 import pnu.ibe.justice.mentoring.service.NoticeService;
 import pnu.ibe.justice.mentoring.util.CustomCollectors;
@@ -30,11 +31,13 @@ public class LectureListController {
 
     private final MentorService mentorService;
     private final UserRepository userRepository;
+    private final HomeEditService homeEditService;
 
     public LectureListController(final MentorService mentorService,
-                               final UserRepository userRepository) {
+                               final UserRepository userRepository, HomeEditService homeEditService) {
         this.mentorService = mentorService;
         this.userRepository = userRepository;
+        this.homeEditService = homeEditService;
     }
 
     @ModelAttribute
@@ -42,6 +45,7 @@ public class LectureListController {
         model.addAttribute("usersValues", userRepository.findAll(Sort.by("seqId"))
                 .stream()
                 .collect(CustomCollectors.toSortedMap(User::getSeqId, User::getEmail)));
+        model.addAttribute("homeEdits",homeEditService.findAll());
     }
 
     @GetMapping

@@ -1,0 +1,23 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{admin/layout}">
+<head>
+    <title>운영진 수정</title>
+</head>
+<body>
+<div layout:fragment="content">
+    <div class="d-flex flex-wrap mb-4">
+        <h1 class="flex-grow-1">Edit</h1>
+    </div>
+    <div th:replace="~{fragments/forms::globalErrors('managementTeam')}" />
+    <form th:action="${requestUri}" method="post">
+        <div th:replace="~{fragments/forms::inputRow(object='managementTeam', field='seqId', disabled=true, type='number')}" />
+        <div th:replace="~{fragments/forms::inputRow(object='managementTeam', field='name', required=true)}" />
+        <div th:replace="~{fragments/forms::inputRow(object='managementTeam', field='content', type='textarea')}" th:wrap="hard"/>
+        <div th:replace="~{fragments/forms::inputRow(object='managementTeam', field='email')}" />
+        <div th:replace="~{fragments/forms::inputRow(object='managementTeam', field='grade', required=true, type='select')}" />
+        <input type="submit" th:value="#{user.edit.headline}" class="btn btn-primary mt-4" />
+    </form>
+</div>
+</body>
+</html>

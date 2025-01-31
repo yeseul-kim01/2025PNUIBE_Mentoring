@@ -17,6 +17,7 @@ import pnu.ibe.justice.mentoring.domain.User;
 import pnu.ibe.justice.mentoring.model.Role;
 import pnu.ibe.justice.mentoring.model.UserDTO;
 import pnu.ibe.justice.mentoring.repos.UserRepository;
+import pnu.ibe.justice.mentoring.service.HomeEditService;
 import pnu.ibe.justice.mentoring.service.UserService;
 import pnu.ibe.justice.mentoring.util.ReferencedWarning;
 import pnu.ibe.justice.mentoring.util.WebUtils;
@@ -31,32 +32,28 @@ import java.net.InterfaceAddress;
 public class MemberInformationController {
 
     private final UserService userService;
+    private final HomeEditService homeEditService;
 
 
     @ModelAttribute("user")
     public SessionUser getSettings(@LoginUser SessionUser user) {
-        System.out.println("success");
-        System.out.println(user.getSeqId());
         return user;
     }
 
-    public MemberInformationController(final UserService userService ){
+    public MemberInformationController(final UserService userService, final HomeEditService homeEditService ){
         this.userService = userService;
-        System.out.println("success get service");
-        System.out.println(userService.findAll());
-
+        this.homeEditService = homeEditService;
     }
 
     @ModelAttribute
     public void prepareContext(final Model model) {
         model.addAttribute("roleValues", Role.values());
+        model.addAttribute("homeEdits",homeEditService.findAll());
     }
 
     @GetMapping("/edit")
     public String edit(@LoginUser SessionUser sessionUser,final Model model) {
         model.addAttribute("modifyUser", userService.get(sessionUser.getSeqId()));
-        System.out.println("edit1 success");
-        System.out.println("success get service");
         return "pages/MemberIfForm";
     }
 
@@ -64,7 +61,6 @@ public class MemberInformationController {
     public String edit(
             @ModelAttribute("modifyUser") @Valid final UserDTO userDTO, @LoginUser SessionUser sessionUser,final BindingResult bindingResult,
                        final RedirectAttributes redirectAttributes) {
-        System.out.println(userDTO.toString());
         userService.update(sessionUser.getSeqId(), userDTO);
         redirectAttributes.addFlashAttribute(WebUtils.MSG_SUCCESS, WebUtils.getMessage("user.update.success"));
         return "redirect:/";

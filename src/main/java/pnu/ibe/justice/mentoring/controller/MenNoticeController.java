@@ -15,6 +15,7 @@ import pnu.ibe.justice.mentoring.model.NoticeDTO;
 import pnu.ibe.justice.mentoring.model.NoticeFileDTO;
 import pnu.ibe.justice.mentoring.repos.NoticeFileRepository;
 import pnu.ibe.justice.mentoring.repos.UserRepository;
+import pnu.ibe.justice.mentoring.service.HomeEditService;
 import pnu.ibe.justice.mentoring.service.NoticeFileService;
 import pnu.ibe.justice.mentoring.service.NoticeService;
 import pnu.ibe.justice.mentoring.util.CustomCollectors;
@@ -36,12 +37,14 @@ public class MenNoticeController {
     private final NoticeService noticeService;
     private final UserRepository userRepository;
     private final NoticeFileService noticeFileService;
+    private final HomeEditService homeEditService;
 
     @ModelAttribute
     public void prepareContext(final Model model) {
         model.addAttribute("usersValues", userRepository.findAll(Sort.by("seqId"))
                 .stream()
                 .collect(CustomCollectors.toSortedMap(User::getSeqId, User::getEmail)));
+        model.addAttribute("homeEdits",homeEditService.findAll());
     }
 
 

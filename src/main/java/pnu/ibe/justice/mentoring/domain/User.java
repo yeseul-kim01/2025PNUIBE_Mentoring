@@ -1,16 +1,8 @@
 package pnu.ibe.justice.mentoring.domain;
 
 import com.nimbusds.oauth2.sdk.TokenIntrospectionSuccessResponse;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EntityListeners;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
+
 import java.time.OffsetDateTime;
 import java.util.Set;
 
@@ -70,22 +62,22 @@ public class User {
     @Column
     private String status;
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL , orphanRemoval = true)
     private Set<UserFile> userFiles;
 
-    @OneToMany(mappedBy = "users")
+    @OneToMany(mappedBy = "users", cascade = CascadeType.ALL , orphanRemoval = true)
     private Set<Mentor> mentors;
 
-    @OneToMany(mappedBy = "users")
+    @OneToMany(mappedBy = "users", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Notice> notices;
 
-    @OneToMany(mappedBy = "users")
+    @OneToMany(mappedBy = "users", cascade = CascadeType.ALL , orphanRemoval = true)
     private Set<Question> questions;
 
-    @OneToMany(mappedBy = "users")
+    @OneToMany(mappedBy = "users", cascade = CascadeType.ALL , orphanRemoval = true)
     private Set<Answer> answers;
 
-    @OneToMany(mappedBy = "users")
+    @OneToMany(mappedBy = "users", cascade = CascadeType.ALL , orphanRemoval = true)
     private Set<SubmitReport> submitReports;
 
     @CreatedDate

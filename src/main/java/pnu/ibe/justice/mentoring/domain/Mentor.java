@@ -1,16 +1,7 @@
 package pnu.ibe.justice.mentoring.domain;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EntityListeners;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
+
 import java.time.OffsetDateTime;
 import java.util.Optional;
 import java.util.Set;
@@ -62,7 +53,7 @@ public class Mentor {
     @JoinColumn(name = "users_id", nullable = false)
     private User users;
 
-    @OneToMany(mappedBy = "mentor")
+    @OneToMany(mappedBy = "mentor", cascade = CascadeType.ALL , orphanRemoval = true )
     private Set<MentorFile> mentorFiles;
 
     @CreatedDate

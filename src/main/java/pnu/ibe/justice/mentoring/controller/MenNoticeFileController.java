@@ -17,6 +17,7 @@ import pnu.ibe.justice.mentoring.domain.Notice;
 import pnu.ibe.justice.mentoring.domain.NoticeFile;
 import pnu.ibe.justice.mentoring.model.NoticeFileDTO;
 import pnu.ibe.justice.mentoring.repos.NoticeRepository;
+import pnu.ibe.justice.mentoring.service.HomeEditService;
 import pnu.ibe.justice.mentoring.service.NoticeFileService;
 import pnu.ibe.justice.mentoring.util.CustomCollectors;
 import pnu.ibe.justice.mentoring.util.WebUtils;
@@ -32,16 +33,20 @@ public class MenNoticeFileController {
 
     private final NoticeFileService noticeFileService;
     private final NoticeRepository noticeRepository;
+    private final HomeEditService homeEditService;
     private String uploadFolder = "/Users/gim-yeseul/Desktop/mentoring_pj/mentoring/upload/";
 
     public MenNoticeFileController(final NoticeFileService noticeFileService,
-                                final NoticeRepository noticeRepository) {
+                                final NoticeRepository noticeRepository,
+                                   final HomeEditService homeEditService) {
         this.noticeFileService = noticeFileService;
         this.noticeRepository = noticeRepository;
+        this.homeEditService = homeEditService;
     }
 
     @ModelAttribute
     public void prepareContext(final Model model) {
+        model.addAttribute("homeEdits",homeEditService.findAll());
         model.addAttribute("noticeValues", noticeRepository.findAll(Sort.by("seqId"))
                 .stream()
                 .collect(CustomCollectors.toSortedMap(Notice::getSeqId, Notice::getTitle)));

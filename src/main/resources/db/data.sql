@@ -33,5 +33,12 @@ insert into home_edits value (1,'mainpage_1','2025년 멘토링 프로그램'),
 
 
 insert into users values(0,4350494,2,now(),now(),'장전캠퍼스','정보의생명공학대학 정보컴퓨터공학부','yes0718@pusan.ac.kr','김예슬','394098','0','GUEST');
+insert into users values(3,20255532,3,now(),now(),'장전캠퍼스','정보의생명공학대학 정보컴퓨터공학부','0718@pusan.ac.kr','김예슬','0104930473','0','ADMIN');
+
+
+
+DELETE FROM users WHERE seq_id = 3;
+
+
 
 

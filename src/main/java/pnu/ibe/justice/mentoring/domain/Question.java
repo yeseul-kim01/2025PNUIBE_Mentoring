@@ -1,16 +1,7 @@
 package pnu.ibe.justice.mentoring.domain;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EntityListeners;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
+
 import java.time.OffsetDateTime;
 import java.util.Set;
 
@@ -38,11 +29,11 @@ public class Question {
     @Column(columnDefinition = "longtext")
     private String content;
 
-    @OneToMany(mappedBy = "question")
+    @OneToMany(mappedBy = "question", cascade = CascadeType.ALL , orphanRemoval = true)
     private Set<QuestionFile> questionFiles;
 
     //변경사항//
-    @OneToMany(mappedBy = "question", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "question", fetch = FetchType.EAGER, cascade = CascadeType.ALL , orphanRemoval = true)
     private Set<Answer> answers;
 
 

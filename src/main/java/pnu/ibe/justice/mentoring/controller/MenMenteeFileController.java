@@ -40,17 +40,19 @@ public class MenMenteeFileController {
     private final UserService userService;
     private final MentorService mentorService;
     private final ApplicationState applicationState;
+    private final HomeEditService homeEditService;
 
 
 
     public MenMenteeFileController(final MentorService mentorService,
                                final UserRepository userRepository,
                                    UserFileService userFileService, UserService userService,
-                                   ApplicationState applicationState) {
+                                   ApplicationState applicationState, HomeEditService homeEditService) {
         this.userFileService = userFileService;
         this.userRepository = userRepository;
         this.userService = userService;
         this.mentorService = mentorService;
+        this.homeEditService = homeEditService;
         this.applicationState = applicationState;
 
     }
@@ -58,6 +60,7 @@ public class MenMenteeFileController {
     @ModelAttribute
     public void prepareContext(final Model model) {
         model.addAttribute("roleValues", Role.values());
+        model.addAttribute("homeEdits",homeEditService.findAll());
         model.addAttribute("usersValues", userRepository.findAll(Sort.by("seqId"))
                 .stream()
                 .collect(CustomCollectors.toSortedMap(User::getSeqId, User::getEmail)));

@@ -17,6 +17,7 @@ import pnu.ibe.justice.mentoring.model.AnswerDTO;
 import pnu.ibe.justice.mentoring.repos.QuestionRepository;
 import pnu.ibe.justice.mentoring.repos.UserRepository;
 import pnu.ibe.justice.mentoring.service.AnswerService;
+import pnu.ibe.justice.mentoring.service.HomeEditService;
 import pnu.ibe.justice.mentoring.util.CustomCollectors;
 import pnu.ibe.justice.mentoring.util.ReferencedWarning;
 import pnu.ibe.justice.mentoring.util.WebUtils;
@@ -29,12 +30,15 @@ public class AnswerController {
     private final AnswerService answerService;
     private final QuestionRepository questionRepository;
     private final UserRepository userRepository;
+    private final HomeEditService homeEditService;
 
     public AnswerController(final AnswerService answerService,
-            final QuestionRepository questionRepository, final UserRepository userRepository) {
+            final QuestionRepository questionRepository, final UserRepository userRepository,
+                            final HomeEditService homeEditService) {
         this.answerService = answerService;
         this.questionRepository = questionRepository;
         this.userRepository = userRepository;
+        this.homeEditService = homeEditService;
     }
 
     @ModelAttribute
@@ -45,6 +49,7 @@ public class AnswerController {
         model.addAttribute("usersValues", userRepository.findAll(Sort.by("seqId"))
                 .stream()
                 .collect(CustomCollectors.toSortedMap(User::getSeqId, User::getEmail)));
+        model.addAttribute("homeEdits",homeEditService.findAll());
     }
 
     @GetMapping

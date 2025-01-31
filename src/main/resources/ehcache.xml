@@ -7,7 +7,7 @@
 
     <cache name="homeEditsCache"
            maxEntriesLocalHeap="10000"
-           maxEntriesLocalDisk="1000"
+           maxEntriesLocalDisk="100"
            eternal="false"
            diskSpoolBufferSizeMB="20"
            timeToIdleSeconds="300"

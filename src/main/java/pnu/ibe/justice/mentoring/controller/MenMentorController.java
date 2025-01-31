@@ -14,10 +14,7 @@ import pnu.ibe.justice.mentoring.model.MentorDTO;
 import pnu.ibe.justice.mentoring.model.MentorFileDTO;
 import pnu.ibe.justice.mentoring.model.Role;
 import pnu.ibe.justice.mentoring.repos.UserRepository;
-import pnu.ibe.justice.mentoring.service.ApplicationState;
-import pnu.ibe.justice.mentoring.service.MentorFileService;
-import pnu.ibe.justice.mentoring.service.MentorService;
-import pnu.ibe.justice.mentoring.service.UserService;
+import pnu.ibe.justice.mentoring.service.*;
 import pnu.ibe.justice.mentoring.util.CustomCollectors;
 import pnu.ibe.justice.mentoring.util.NotFoundException;
 import pnu.ibe.justice.mentoring.util.WebUtils;
@@ -31,6 +28,7 @@ public class MenMentorController {
         return user;
     }
 
+    private final HomeEditService homeEditService;
     private final MentorService mentorService;
     private final UserRepository userRepository;
     private final MentorFileService mentorFileService;
@@ -40,17 +38,19 @@ public class MenMentorController {
 
     public MenMentorController(final MentorService mentorService,
                                final UserRepository userRepository, MentorFileService mentorFileService,
-                               UserService userService, ApplicationState applicationState) {
+                               UserService userService,HomeEditService homeEditService, ApplicationState applicationState) {
         this.mentorService = mentorService;
         this.userRepository = userRepository;
         this.mentorFileService = mentorFileService;
         this.userService = userService;
+        this.homeEditService = homeEditService;
         this.applicationState = applicationState;
     }
 
     @ModelAttribute
     public void prepareContext(final Model model) {
         model.addAttribute("roleValues", Role.values());
+        model.addAttribute("homeEdits",homeEditService.findAll());
         model.addAttribute("usersValues", userRepository.findAll(Sort.by("seqId"))
                 .stream()
                 .collect(CustomCollectors.toSortedMap(User::getSeqId, User::getEmail)));

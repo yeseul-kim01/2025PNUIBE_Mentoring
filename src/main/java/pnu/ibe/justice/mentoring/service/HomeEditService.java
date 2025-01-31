@@ -25,6 +25,7 @@ public class HomeEditService {
     @Cacheable(value = "homeEditsCache", key = "'allHomeEdits'")
     public List<HomeEditDTO> findAll() {
         List<HomeEdit> homeEdits = homeEditRepository.findAll(Sort.by("seqId"));
+        System.out.println("No Cache: HomeEditService.findAll()"+homeEdits.toString());
         return homeEdits.stream()
                 .map(homeEdit -> mapToDTO(homeEdit,new HomeEditDTO()))
                 .collect(Collectors.toList());

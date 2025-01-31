@@ -54,17 +54,21 @@ public class QuestionListController {
     private final UserService userService;
     private final UserRepository userRepository;
     private final AnswerService answerService;
+    private final HomeEditService homeEditService;
 //    String uploadFolder = "/Users/KD-005/IdeaProjects/mentoring/upload/";
     private String uploadFolder = "/Users/gim-yeseul/Desktop/mentoring_pj/mentoring/upload/";
 
     public QuestionListController(final QuestionService questionService,
-                                  final UserRepository userRepository, final UserService userService, QuestionFileService questionFileService, final AnswerService answerService, QuestionRepository questionRepository) {
+                                  final UserRepository userRepository, final UserService userService,
+                                  QuestionFileService questionFileService, final AnswerService answerService,
+                                  QuestionRepository questionRepository, HomeEditService homeEditService) {
         this.questionService = questionService;
         this.userRepository = userRepository;
         this.userService = userService;
         this.questionFileService = questionFileService;
         this.answerService = answerService;
         this.questionRepository = questionRepository;
+        this.homeEditService = homeEditService;
     }
 
     @ModelAttribute
@@ -72,6 +76,7 @@ public class QuestionListController {
         model.addAttribute("usersValues", userRepository.findAll(Sort.by("seqId"))
                 .stream()
                 .collect(CustomCollectors.toSortedMap(User::getSeqId, User::getEmail)));
+        model.addAttribute("homeEdits",homeEditService.findAll());
     }
 
     @GetMapping

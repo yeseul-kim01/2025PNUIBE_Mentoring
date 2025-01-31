@@ -53,8 +53,11 @@ public class SubmitReport {
     @JoinColumn(name = "users_id", nullable = false)
     private User users;
 
-    @OneToMany(mappedBy = "submitReport")
+    @OneToMany(mappedBy = "submitReport", cascade = CascadeType.REMOVE , orphanRemoval = true)
     private Set<SubmitReportFile> submitReportFiles;
+
+    @OneToMany(mappedBy = "submitReport", cascade = CascadeType.REMOVE , orphanRemoval = true)
+    private Set<SubmitAnswer> submitAnswers;
 
     @CreatedDate
     @Column(nullable = false, updatable = false)

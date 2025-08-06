@@ -40,3 +40,4 @@ bin/
 
 settings.gradle
 /upload/**/
+.DS_Store

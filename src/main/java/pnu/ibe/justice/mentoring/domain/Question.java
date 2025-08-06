@@ -36,7 +36,6 @@ public class Question {
     @OneToMany(mappedBy = "question", fetch = FetchType.EAGER, cascade = CascadeType.ALL , orphanRemoval = true)
     private Set<Answer> answers;
 
-
     //변경사항//
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "users_id", nullable = false)
